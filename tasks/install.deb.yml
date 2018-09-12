@@ -35,12 +35,16 @@
   with_items: "{{ mongodb_version[0:3] }}"
 
 - name: Add APT repository
-  apt_repository: repo="{{ mongodb_repository[item] }}" update_cache=yes
+  apt_repository:
+    repo: "{{ mongodb_repository[item] }}"
   with_items: "{{ mongodb_version[0:3] }}"
   when: mongodb_package == 'mongodb-org'
 
 - name: Install MongoDB package
-  apt: name={{item}} state=present
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: true
   with_items:
     - "{{mongodb_package}}"
     - numactl
@@ -51,7 +55,9 @@
   when: "'systemd' in systemd.stdout"
 
 - name: Install PyMongo package
-  apt: pkg=python-pymongo state=latest
+  apt:
+    name: python-pymongo
+    state: present
   when: not mongodb_pymongo_from_pip
 
 - name: Install PIP
