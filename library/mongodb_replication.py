@@ -68,7 +68,7 @@ options:
     ssl:
         description:
             - Whether to use an SSL connection when connecting to the database
-        default: False
+        default: false
     build_indexes:
         description:
             - Determines whether the mongod builds indexes on this member.

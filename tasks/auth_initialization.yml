@@ -13,7 +13,7 @@
   shell: "pidof mongod"
   register: pidof_mongod
   when: mongodb_manage_service == false
-  ignore_errors: yes
+  ignore_errors: true
 
 - name: start mongodb daemon
   shell: "LC_ALL=C /usr/bin/mongod --config /etc/mongod.conf --fork"

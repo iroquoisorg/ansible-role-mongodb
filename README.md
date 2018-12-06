@@ -1,6 +1,6 @@
 # mongodb
 
-[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-mongodb.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-memcached)
+[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-mongodb.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-mongodb)
 
 Ansible role for mongodb
 
@@ -106,3 +106,7 @@ mongodb_root_backup_name: "backupuser"
 mongodb_root_backup_password: "passw0rd"
 
 ```
+
+# Development
+
+Please check [development guide](DEVELOPMENT.md) for details about developing and testing this role.

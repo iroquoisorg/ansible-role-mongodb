@@ -37,6 +37,7 @@
 - name: Add APT repository
   apt_repository:
     repo: "{{ mongodb_repository[item] }}"
+    update_cache: true
   with_items: "{{ mongodb_version[0:3] }}"
   when: mongodb_package == 'mongodb-org'
 
