@@ -13,7 +13,7 @@ This role was prepared and tested for Ubuntu 16.04.
 # Default settings
 
 ```
-
+---
 
 mongodb_package: mongodb-org
 mongodb_version: "4.0"

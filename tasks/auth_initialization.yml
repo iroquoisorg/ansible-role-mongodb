@@ -10,13 +10,15 @@
   wait_for: host=127.0.0.1 port="{{ mongodb_net_port }}" delay=5 state=started
 
 - name: get pid of mongodb for non daemon mode
-  shell: "pidof mongod"
+  command: "pidof mongod"
   register: pidof_mongod
   when: mongodb_manage_service == false
   ignore_errors: true
 
 - name: start mongodb daemon
-  shell: "LC_ALL=C /usr/bin/mongod --config /etc/mongod.conf --fork"
+  command: "/usr/bin/mongod --config /etc/mongod.conf --fork"
+  environment:
+    LC_ALL: C
   when: mongodb_manage_service == false and pidof_mongod.rc == 1
 
 - name: create administrative user siteUserAdmin
@@ -28,11 +30,9 @@
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_net_port }}"
   with_items:
-    - {
-      name: "{{ mongodb_user_admin_name }}",
-      password: "{{ mongodb_user_admin_password }}",
+    - name: "{{ mongodb_user_admin_name }}"
+      password: "{{ mongodb_user_admin_password }}"
       roles: "userAdminAnyDatabase"
-      }
 
 - name: create administrative user siteRootAdmin
   mongodb_user:
@@ -43,11 +43,9 @@
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_net_port }}"
   with_items:
-    - {
-      name: "{{ mongodb_root_admin_name }}",
-      password: "{{ mongodb_root_admin_password }}",
+    - name: "{{ mongodb_root_admin_name }}"
+      password: "{{ mongodb_root_admin_password }}"
       roles: "root"
-      }
 
 - name: create backup user "backupuser"
   mongodb_user:
@@ -58,11 +56,9 @@
     roles: "{{ item.roles }}"
     login_port: "{{ mongodb_net_port }}"
   with_items:
-    - {
-      name: "{{ mongodb_root_backup_name }}",
-      password: "{{ mongodb_root_backup_password }}",
+    - name: "{{ mongodb_root_backup_name }}"
+      password: "{{ mongodb_root_backup_password }}"
       roles: "backup,clusterMonitor"
-      }
 
 - name: Move back mongod.conf
   template: src=mongod.conf.j2 dest=/etc/mongod.conf owner=root group=root mode=0644
@@ -75,5 +71,5 @@
   wait_for: host="{{ mongodb_net_bindip }}" port="{{ mongodb_net_port }}" delay=5 state=started
 
 - name: stop mongodb if was not started
-  shell: "kill {{ pidof_mongod.stdout }}"
+  command: "kill {{ pidof_mongod.stdout }}"
   when: mongodb_manage_service == false and pidof_mongod.rc == 0
